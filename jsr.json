@@ -1,0 +1,5 @@
+{
+  "name": "@alexander-karan/local-storage-ts",
+  "version": "0.0.1",
+  "exports": "./mod.ts"
+}
