@@ -1,5 +1,5 @@
-import { getTypeKey } from "./get_type_key.ts";
-import type { LocalStoreType } from "./types.ts";
+import { getTypeKey } from './get_type_key.ts';
+import type { LocalStoreType } from './types.ts';
 
 /**
  * Validate the saved type of a key
@@ -9,11 +9,11 @@ import type { LocalStoreType } from "./types.ts";
  * @returns Returns true if the saved type matches the expected type, false if it does not, and null if the key does not exist
  */
 export function validateSavedType(
-  key: string,
-  expectedType: LocalStoreType
+	key: string,
+	expectedType: LocalStoreType,
 ): boolean | null {
-  const typeKey = getTypeKey(key);
-  const currentLocalStorageType = localStorage.getItem(typeKey);
-  if (!currentLocalStorageType) return null;
-  return currentLocalStorageType === expectedType;
+	const typeKey = getTypeKey(key);
+	const currentLocalStorageType = localStorage.getItem(typeKey);
+	if (!currentLocalStorageType) return null;
+	return currentLocalStorageType === expectedType;
 }
