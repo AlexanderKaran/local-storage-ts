@@ -3,6 +3,9 @@
   "version": "0.0.4",
   "exports": "./mod.ts",
   "tasks": {
-    "build:npm": "deno run -A build-npm.ts"
+    "build:npm": "deno run -A build-npm.ts",
+    "lint": "deno lint",
+    "format": "deno fmt --check",
+    "test": "deno test --allow-read --allow-write --allow-net"
   }
 }
