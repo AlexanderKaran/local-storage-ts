@@ -1,5 +1,10 @@
 # Type Safe Local Storage
 
+[![GitHub version](https://badge.fury.io/gh/AlexanderKaran%2Flocal-storage-ts.svg)](https://badge.fury.io/gh/AlexanderKaran%2Flocal-storage-ts)
+[![npm version](https://badge.fury.io/js/local-storage-typescript.svg)](https://badge.fury.io/js/local-storage-typescript)
+[![JSR](https://jsr.io/badges/@alexander-karan/local-storage-ts)](https://jsr.io/@alexander-karan/local-storage-ts)
+
+
 This is a simple library that allows you to store and retrieve data from [local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) in a type safe way. It uses the `localStorage` API under the hood. It works just like the `localStorage` API returning a value or null if the key does not exist. The difference is that it provides type safe functions for storing and retrieving data.
 
 ## Installation
