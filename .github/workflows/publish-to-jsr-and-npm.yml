@@ -9,7 +9,7 @@ on:
       - "v*"
 
 jobs:
-  publish:
+  publish-jsr:
     runs-on: ubuntu-latest
 
     permissions:
@@ -22,17 +22,17 @@ jobs:
       - name: Publish package
         run: npx jsr publish
 
-  release:
+  release-npm:
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
 
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: setup deno
+      - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
@@ -50,7 +50,7 @@ jobs:
           registry-url: https://registry.npmjs.com
 
       - name: Build
-        run: deno task build:npm ${{ env.version }}
+        run: deno task build:npm
         env:
           NPM_VERSION: ${{ env.version }}
 
