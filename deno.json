@@ -1,4 +1,5 @@
 {
+  "name": "@alexander-karan/local-storage-ts",
   "tasks": {
     "build:npm": "deno run -A build-npm.ts"
   }

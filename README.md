@@ -20,7 +20,7 @@ bunx jsr add @alexander-karan/local-storage-ts
 Or you can install from npm registry by running:
 
 ```
-
+npm i local-storage-typescript
 ```
 
 ## Usage
