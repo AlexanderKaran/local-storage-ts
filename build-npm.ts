@@ -4,7 +4,7 @@ const outDir = "./build/npm";
 
 await emptyDir(outDir);
 
-let [version] = Deno.args;
+const [version] = Deno.args;
 if (!version) {
   throw new Error("a version argument is required to build the npm package");
 }
