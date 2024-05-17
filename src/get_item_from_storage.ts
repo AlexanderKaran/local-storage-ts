@@ -1,11 +1,11 @@
 import {
-  LocalStorageError,
-  LocalStorageFetchTypeError,
-  LocalStorageTypeKeyError,
-} from "./errors.ts";
-import { getLocalStorageType } from "./get_local_storage_type.ts";
-import type { LocalStoreType, Result } from "./types.ts";
-import { validateSavedType } from "./validate_saved_type.ts";
+	type LocalStorageError,
+	LocalStorageFetchTypeError,
+	LocalStorageTypeKeyError,
+} from './errors.ts';
+import { getLocalStorageType } from './get_local_storage_type.ts';
+import type { LocalStoreType, Result } from './types.ts';
+import { validateSavedType } from './validate_saved_type.ts';
 
 /**
  * Get an item from local storage and validate its type
@@ -19,28 +19,28 @@ import { validateSavedType } from "./validate_saved_type.ts";
  * @throws LocalStorageFetchTypeError
  */
 function getItemAndValidate<T = unknown>(
-  key: string,
-  parser: (value: string) => T,
-  expectedType: LocalStoreType
+	key: string,
+	parser: (value: string) => T,
+	expectedType: LocalStoreType,
 ): T | null {
-  const item = localStorage.getItem(key);
-  if (item === null) return null;
+	const item = localStorage.getItem(key);
+	if (item === null) return null;
 
-  const validated = validateSavedType(key, expectedType);
-  if (validated === null) {
-    throw new LocalStorageTypeKeyError(key);
-  }
+	const validated = validateSavedType(key, expectedType);
+	if (validated === null) {
+		throw new LocalStorageTypeKeyError(key);
+	}
 
-  const parsedItem = parser(item);
-  if (validated === false) {
-    throw new LocalStorageFetchTypeError(
-      key,
-      expectedType,
-      getLocalStorageType(parsedItem)
-    );
-  }
+	const parsedItem = parser(item);
+	if (validated === false) {
+		throw new LocalStorageFetchTypeError(
+			key,
+			expectedType,
+			getLocalStorageType(parsedItem),
+		);
+	}
 
-  return parsedItem;
+	return parsedItem;
 }
 
 /**
@@ -53,7 +53,7 @@ function getItemAndValidate<T = unknown>(
  * @throws LocalStorageFetchTypeError
  */
 export function getStringFromStorage(key: string): string | null {
-  return getItemAndValidate(key, (value) => value, "string");
+	return getItemAndValidate(key, (value) => value, 'string');
 }
 
 /**
@@ -64,13 +64,13 @@ export function getStringFromStorage(key: string): string | null {
  * @returns The string value or null if the key does not exist
  */
 export function safeGetStringFromStorage(
-  key: string
+	key: string,
 ): Result<string | null, LocalStorageError> {
-  try {
-    return { success: true, value: getStringFromStorage(key) };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		return { success: true, value: getStringFromStorage(key) };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -83,7 +83,7 @@ export function safeGetStringFromStorage(
  * @throws LocalStorageFetchTypeError
  */
 export function getNumberFromStorage(key: string): number | null {
-  return getItemAndValidate(key, (value) => Number(value), "number");
+	return getItemAndValidate(key, (value) => Number(value), 'number');
 }
 
 /**
@@ -94,13 +94,13 @@ export function getNumberFromStorage(key: string): number | null {
  * @returns The number value or null if the key does not exist
  */
 export function safeGetNumberFromStorage(
-  key: string
+	key: string,
 ): Result<number | null, LocalStorageError> {
-  try {
-    return { success: true, value: getNumberFromStorage(key) };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		return { success: true, value: getNumberFromStorage(key) };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -113,7 +113,7 @@ export function safeGetNumberFromStorage(
  * @throws LocalStorageFetchTypeError
  */
 export function getBooleanFromStorage(key: string): boolean | null {
-  return getItemAndValidate(key, (value) => value === "true", "boolean");
+	return getItemAndValidate(key, (value) => value === 'true', 'boolean');
 }
 
 /**
@@ -124,13 +124,13 @@ export function getBooleanFromStorage(key: string): boolean | null {
  * @returns The boolean value or null if the key does not exist
  */
 export function safeGetBooleanFromStorage(
-  key: string
+	key: string,
 ): Result<boolean | null, LocalStorageError> {
-  try {
-    return { success: true, value: getBooleanFromStorage(key) };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		return { success: true, value: getBooleanFromStorage(key) };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -143,7 +143,7 @@ export function safeGetBooleanFromStorage(
  * @throws LocalStorageFetchTypeError
  */
 export function getBigIntFromStorage(key: string): bigint | null {
-  return getItemAndValidate(key, (value) => BigInt(value), "bigint");
+	return getItemAndValidate(key, (value) => BigInt(value), 'bigint');
 }
 
 /**
@@ -154,13 +154,13 @@ export function getBigIntFromStorage(key: string): bigint | null {
  * @returns The bigint value or null if the key does not exist
  */
 export function safeGetBigIntFromStorage(
-  key: string
+	key: string,
 ): Result<bigint | null, LocalStorageError> {
-  try {
-    return { success: true, value: getBigIntFromStorage(key) };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		return { success: true, value: getBigIntFromStorage(key) };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -173,7 +173,7 @@ export function safeGetBigIntFromStorage(
  * @throws LocalStorageFetchTypeError
  */
 export function getDateFromStorage(key: string): Date | null {
-  return getItemAndValidate(key, (value) => new Date(value), "date");
+	return getItemAndValidate(key, (value) => new Date(value), 'date');
 }
 
 /**
@@ -184,13 +184,13 @@ export function getDateFromStorage(key: string): Date | null {
  * @returns The date value or null if the key does not exist
  */
 export function safeGetDateFromStorage(
-  key: string
+	key: string,
 ): Result<Date | null, LocalStorageError> {
-  try {
-    return { success: true, value: getDateFromStorage(key) };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		return { success: true, value: getDateFromStorage(key) };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -203,7 +203,7 @@ export function safeGetDateFromStorage(
  * @throws LocalStorageFetchTypeError
  */
 export function getArrayFromStorage<T = unknown>(key: string): T[] | null {
-  return getItemAndValidate(key, (value) => JSON.parse(value), "array");
+	return getItemAndValidate(key, (value) => JSON.parse(value), 'array');
 }
 
 /**
@@ -214,13 +214,13 @@ export function getArrayFromStorage<T = unknown>(key: string): T[] | null {
  * @returns The array value or null if the key does not exist
  */
 export function safeGetArrayFromStorage<T = unknown>(
-  key: string
+	key: string,
 ): Result<T[] | null, LocalStorageError> {
-  try {
-    return { success: true, value: getArrayFromStorage<T>(key) };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		return { success: true, value: getArrayFromStorage<T>(key) };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -233,9 +233,9 @@ export function safeGetArrayFromStorage<T = unknown>(
  * @throws LocalStorageFetchTypeError
  */
 export function getObjectFromStorage<
-  T = { [key: string | number | symbol]: unknown }
+	T = { [key: string | number | symbol]: unknown },
 >(key: string): T | null {
-  return getItemAndValidate(key, (value) => JSON.parse(value), "object");
+	return getItemAndValidate(key, (value) => JSON.parse(value), 'object');
 }
 
 /**
@@ -246,11 +246,46 @@ export function getObjectFromStorage<
  * @returns The object value or null if the key does not exist
  */
 export function safeGetObjectFromStorage<
-  T = { [key: string | number | symbol]: unknown }
+	T = { [key: string | number | symbol]: unknown },
 >(key: string): Result<T | null, LocalStorageError> {
-  try {
-    return { success: true, value: getObjectFromStorage<T>(key) };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		return { success: true, value: getObjectFromStorage<T>(key) };
+	} catch (error) {
+		return { success: false, error };
+	}
+}
+
+/**
+ * Get a Map from local storage
+ *
+ * @param key The key to get from local storage
+ *
+ * @returns The Map value or null if the key does not exist
+ * @throws LocalStorageTypeKeyError
+ * @throws LocalStorageFetchTypeError
+ */
+export function getMapFromStorage(key: string): Map<unknown, unknown> | null {
+	return getItemAndValidate(
+		key,
+		(value) => new Map(JSON.parse(value)),
+		'map',
+	);
+}
+
+/**
+ * Get a Map from local storage safely
+ *
+ * @param key The key to get from local storage
+ *
+ * @returns Result<Map<unknown, unknown> | null, LocalStorageError>
+ */
+export function safeGetMapFromStorage(
+	key: string,
+): Result<Map<unknown, unknown> | null, LocalStorageError> {
+	try {
+		const value = getMapFromStorage(key);
+		return { success: true, value };
+	} catch (error) {
+		return { success: false, error };
+	}
 }

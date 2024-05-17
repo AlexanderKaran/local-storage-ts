@@ -1,12 +1,12 @@
-import { formatValue } from "./format_value.ts";
-import { getTypeKey } from "./get_type_key.ts";
-import { getLocalStorageType } from "./get_local_storage_type.ts";
+import { formatValue } from './format_value.ts';
+import { getTypeKey } from './get_type_key.ts';
+import { getLocalStorageType } from './get_local_storage_type.ts';
 import {
-  LocalStorageError,
-  LocalStorageInsertTypeError,
-  LocalStorageTypeMismatchError,
-} from "./errors.ts";
-import type { LocalStoreType, Result } from "./types.ts";
+	type LocalStorageError,
+	LocalStorageInsertTypeError,
+	LocalStorageTypeMismatchError,
+} from './errors.ts';
+import type { LocalStoreType, Result } from './types.ts';
 
 /**
  * Validate the value and set it in local storage if its type matches the expected type
@@ -20,42 +20,45 @@ import type { LocalStoreType, Result } from "./types.ts";
  * @throws LocalStorageInsertTypeError
  */
 function validateAndSetItem(
-  key: string,
-  expectedType: LocalStoreType,
-  value?: unknown
+	key: string,
+	expectedType: LocalStoreType,
+	value?: unknown,
 ) {
-  const typeKey = getTypeKey(key);
-  const localStorageType = getLocalStorageType(value);
-  const currentLocalStorageType = localStorage.getItem(
-    typeKey
-  ) as LocalStoreType;
+	const typeKey = getTypeKey(key);
+	const localStorageType = getLocalStorageType(value);
+	const currentLocalStorageType = localStorage.getItem(
+		typeKey,
+	) as LocalStoreType;
 
-  // Check expected type against value type
-  if (expectedType !== localStorageType) {
-    throw new LocalStorageInsertTypeError(key, expectedType, localStorageType);
-  }
+	// Check expected type against value type
+	if (expectedType !== localStorageType) {
+		throw new LocalStorageInsertTypeError(
+			key,
+			expectedType,
+			localStorageType,
+		);
+	}
 
-  const currentValueIsUndefined =
-    currentLocalStorageType === "undefined" &&
-    currentLocalStorageType !== localStorageType;
+	const currentValueIsUndefined = currentLocalStorageType === 'undefined' &&
+		currentLocalStorageType !== localStorageType;
 
-  // No value currently set or current type is undefined
-  if (currentLocalStorageType == null || currentValueIsUndefined) {
-    localStorage.setItem(typeKey, localStorageType);
-    localStorage.setItem(key, formatValue(value) ?? "");
-    return;
-  }
+	// No value currently set or current type is undefined
+	if (currentLocalStorageType == null || currentValueIsUndefined) {
+		localStorage.setItem(typeKey, localStorageType);
+		localStorage.setItem(key, formatValue(value) ?? '');
+		return;
+	}
 
-  // Value already set, validate before setting
-  if (currentLocalStorageType !== localStorageType) {
-    throw new LocalStorageTypeMismatchError(
-      key,
-      currentLocalStorageType,
-      getLocalStorageType(value)
-    );
-  }
+	// Value already set, validate before setting
+	if (currentLocalStorageType !== localStorageType) {
+		throw new LocalStorageTypeMismatchError(
+			key,
+			currentLocalStorageType,
+			getLocalStorageType(value),
+		);
+	}
 
-  localStorage.setItem(key, formatValue(value) ?? "");
+	localStorage.setItem(key, formatValue(value) ?? '');
 }
 
 /**
@@ -69,7 +72,7 @@ function validateAndSetItem(
  * @throws LocalStorageInsertTypeError
  */
 export function setStringInStorage(key: string, value?: string): void {
-  validateAndSetItem(key, "string", value);
+	validateAndSetItem(key, 'string', value);
 }
 
 /**
@@ -81,15 +84,15 @@ export function setStringInStorage(key: string, value?: string): void {
  * @returns Result<null, LocalStorageError>
  */
 export function safeSetStringInStorage(
-  key: string,
-  value?: string
+	key: string,
+	value?: string,
 ): Result<null, LocalStorageError> {
-  try {
-    setStringInStorage(key, value);
-    return { success: true, value: null };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		setStringInStorage(key, value);
+		return { success: true, value: null };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -103,7 +106,7 @@ export function safeSetStringInStorage(
  * @throws LocalStorageInsertTypeError
  */
 export function setNumberInStorage(key: string, value?: number): void {
-  validateAndSetItem(key, "number", value);
+	validateAndSetItem(key, 'number', value);
 }
 
 /**
@@ -115,15 +118,15 @@ export function setNumberInStorage(key: string, value?: number): void {
  * @returns Result<null, LocalStorageError>
  */
 export function safeSetNumberInStorage(
-  key: string,
-  value?: number
+	key: string,
+	value?: number,
 ): Result<null, LocalStorageError> {
-  try {
-    setNumberInStorage(key, value);
-    return { success: true, value: null };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		setNumberInStorage(key, value);
+		return { success: true, value: null };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -137,7 +140,7 @@ export function safeSetNumberInStorage(
  * @throws LocalStorageInsertTypeError
  */
 export function setBooleanInStorage(key: string, value?: boolean): void {
-  validateAndSetItem(key, "boolean", value);
+	validateAndSetItem(key, 'boolean', value);
 }
 
 /**
@@ -149,15 +152,15 @@ export function setBooleanInStorage(key: string, value?: boolean): void {
  * @returns Result<null, LocalStorageError>
  */
 export function safeSetBooleanInStorage(
-  key: string,
-  value?: boolean
+	key: string,
+	value?: boolean,
 ): Result<null, LocalStorageError> {
-  try {
-    setBooleanInStorage(key, value);
-    return { success: true, value: null };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		setBooleanInStorage(key, value);
+		return { success: true, value: null };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -171,7 +174,7 @@ export function safeSetBooleanInStorage(
  * @throws LocalStorageInsertTypeError
  */
 export function setBigIntInStorage(key: string, value?: bigint): void {
-  validateAndSetItem(key, "bigint", value);
+	validateAndSetItem(key, 'bigint', value);
 }
 
 /**
@@ -183,15 +186,15 @@ export function setBigIntInStorage(key: string, value?: bigint): void {
  * @returns Result<null, LocalStorageError>
  */
 export function safeSetBigIntInStorage(
-  key: string,
-  value?: bigint
+	key: string,
+	value?: bigint,
 ): Result<null, LocalStorageError> {
-  try {
-    setBigIntInStorage(key, value);
-    return { success: true, value: null };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		setBigIntInStorage(key, value);
+		return { success: true, value: null };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -205,7 +208,7 @@ export function safeSetBigIntInStorage(
  * @throws LocalStorageInsertTypeError
  */
 export function setDateInStorage(key: string, value?: Date): void {
-  validateAndSetItem(key, "date", value);
+	validateAndSetItem(key, 'date', value);
 }
 
 /**
@@ -217,15 +220,15 @@ export function setDateInStorage(key: string, value?: Date): void {
  * @returns Result<null, LocalStorageError>
  */
 export function safeSetDateInStorage(
-  key: string,
-  value?: Date
+	key: string,
+	value?: Date,
 ): Result<null, LocalStorageError> {
-  try {
-    setDateInStorage(key, value);
-    return { success: true, value: null };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		setDateInStorage(key, value);
+		return { success: true, value: null };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -239,7 +242,7 @@ export function safeSetDateInStorage(
  * @throws LocalStorageInsertTypeError
  */
 export function setArrayInStorage<T = unknown>(key: string, value?: T[]): void {
-  validateAndSetItem(key, "array", value);
+	validateAndSetItem(key, 'array', value);
 }
 
 /**
@@ -251,15 +254,15 @@ export function setArrayInStorage<T = unknown>(key: string, value?: T[]): void {
  * @returns Result<null, LocalStorageError>
  */
 export function safeSetArrayInStorage<T = unknown>(
-  key: string,
-  value?: T[]
+	key: string,
+	value?: T[],
 ): Result<null, LocalStorageError> {
-  try {
-    setArrayInStorage(key, value);
-    return { success: true, value: null };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		setArrayInStorage(key, value);
+		return { success: true, value: null };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
 
 /**
@@ -273,10 +276,10 @@ export function safeSetArrayInStorage<T = unknown>(
  * @throws LocalStorageInsertTypeError
  */
 export function setObjectInStorage(
-  key: string,
-  value?: { [key: string | number | symbol]: unknown }
+	key: string,
+	value?: { [key: string | number | symbol]: unknown },
 ): void {
-  validateAndSetItem(key, "object", value);
+	validateAndSetItem(key, 'object', value);
 }
 
 /**
@@ -288,13 +291,50 @@ export function setObjectInStorage(
  * @returns Result<null, LocalStorageError>
  */
 export function safeSetObjectInStorage(
-  key: string,
-  value?: { [key: string | number | symbol]: unknown }
+	key: string,
+	value?: { [key: string | number | symbol]: unknown },
 ): Result<null, LocalStorageError> {
-  try {
-    setObjectInStorage(key, value);
-    return { success: true, value: null };
-  } catch (error) {
-    return { success: false, error };
-  }
+	try {
+		setObjectInStorage(key, value);
+		return { success: true, value: null };
+	} catch (error) {
+		return { success: false, error };
+	}
+}
+
+/**
+ * Set a Map in local storage
+ *
+ * @param key The key to save the Map under in local storage
+ * @param value The Map to save in local storage
+ *
+ * @returns void
+ * @throws LocalStorageTypeMismatchError
+ * @throws LocalStorageInsertTypeError
+ */
+export function setMapInStorage(
+	key: string,
+	value?: Map<unknown, unknown>,
+): void {
+	validateAndSetItem(key, 'map', value);
+}
+
+/**
+ * Safely set a Map in local storage
+ *
+ * @param key The key to save the Map under in local storage
+ * @param value The Map to save in local storage
+ *
+ * @returns Result<null, LocalStorageError>
+ */
+export function safeSetMapInStorage(
+	key: string,
+	value?: Map<unknown, unknown>,
+): Result<null, LocalStorageError> {
+	try {
+		setMapInStorage(key, value);
+		return { success: true, value: null };
+	} catch (error) {
+		return { success: false, error };
+	}
 }
