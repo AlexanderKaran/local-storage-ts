@@ -1,6 +1,6 @@
 # Type Safe Local Storage
 
-This is a simple library that allows you to store and retrieve data from local storage in a type safe way. It uses the `localStorage` API under the hood. It works just like the `localStorage` API returning a value or null if the key does not exist. The difference is that it provides type safe functions for storing and retrieving data.
+This is a simple library that allows you to store and retrieve data from [local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) in a type safe way. It uses the `localStorage` API under the hood. It works just like the `localStorage` API returning a value or null if the key does not exist. The difference is that it provides type safe functions for storing and retrieving data.
 
 ## Installation
 
@@ -107,3 +107,5 @@ Type Safe Local Storage supports the following types:
 - The `localStorage` API only allows you to store strings. This library allows you to store and retrieve data in a type safe way. However, the data is stored as a string under the hood. This means that when you retrieve the data, you will need to parse it back to the original type. This library does this for you under the hood. For objects and arrays, it uses `JSON.parse` and `JSON.stringify` to store and retrieve the data. For Dates, it uses the `Date` constructor to parse the date string back to a date object using ISO string format. Keep this in mind when using this library.
 
 - To delete a key from local storage, you must use the provided `removeItemFromStorage` function. This is because this library keeps track of the types of data stored in local storage. If you delete a key using the `localStorage` API directly, the type information will be lost or cause a type mismatch error when trying to retrieve the data.
+
+- This library requires access to the `localStorage` API. You need to run this library in an environment that supports the `localStorage` API. This library will not work in an environment that does not support the `localStorage` API. Make sure your code runs on a browser (the client side) or Deno where the `localStorage` API is available. Currently NodeJs does not support the `localStorage` API but you can use a library like `node-localstorage` to provide access to the `localStorage` API. Bun also does not support the `localStorage` API.
