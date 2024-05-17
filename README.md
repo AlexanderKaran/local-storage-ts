@@ -103,9 +103,10 @@ Type Safe Local Storage supports the following types:
 - String
 - Number
 - Boolean
-- Date // Stored as a ISO string under the hood
-- Object // Stored as a JSON string under the hood
-- Array // Stored as a JSON string under the hood
+- Date -> Stored as a ISO string under the hood
+- Object -> Stored as a JSON string under the hood
+- Array -> Stored as a JSON string under the hood
+- Map -> Stored as a JSON string under the hood by parsing the map to an array of key value pairs
 
 ## Gotcha's
 

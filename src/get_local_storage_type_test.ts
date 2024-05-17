@@ -47,3 +47,7 @@ Deno.test("getLocalStorageType returns correct type for array", () => {
 Deno.test("getLocalStorageType returns correct type for object", () => {
   assertEquals(getLocalStorageType({ key: "value" }), "object");
 });
+
+Deno.test("getLocalStorageType returns correct type for map", () => {
+  assertEquals(getLocalStorageType(new Map()), "map");
+});

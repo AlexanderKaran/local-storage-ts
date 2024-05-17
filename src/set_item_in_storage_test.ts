@@ -18,6 +18,8 @@ import {
   safeSetArrayInStorage,
   setObjectInStorage,
   safeSetObjectInStorage,
+  setMapInStorage,
+  safeSetMapInStorage,
 } from "./set_item_in_storage.ts";
 import { LocalStorageInsertTypeError } from "./errors.ts";
 import { getTypeKey } from "./get_type_key.ts";
@@ -380,6 +382,68 @@ Deno.test("Set type object in storage", () => {
       assertEquals(result, {
         success: false,
         error: new LocalStorageInsertTypeError(key, "object", "string"),
+      });
+    }
+  );
+
+  removeItemFromStorage(key);
+});
+
+Deno.test("Set type map in storage", () => {
+  const key = "map-set-key";
+  removeItemFromStorage(key);
+
+  Deno.test("setMapInStorage should set a map in local storage", () => {
+    const value = new Map();
+    value.set("key1", "value1");
+    value.set("key2", "value2");
+    setMapInStorage(key, value);
+    assertEquals(
+      localStorage.getItem(key),
+      JSON.stringify(Array.from(value.entries()))
+    );
+
+    const typeKey = localStorage.getItem(getTypeKey(key));
+    assertEquals(typeKey, "map");
+  });
+
+  Deno.test(
+    "safeSetMapInStorage should safely set a map in local storage",
+    () => {
+      const value = new Map();
+      value.set("key3", "value3");
+      value.set("key4", "value4");
+      const result = safeSetMapInStorage(key, value);
+      assertEquals(result.success, true);
+      assertEquals(
+        localStorage.getItem(key),
+        JSON.stringify(Array.from(value.entries()))
+      );
+
+      const typeKey = localStorage.getItem(getTypeKey(key));
+      assertEquals(typeKey, "map");
+    }
+  );
+
+  Deno.test(
+    "setMapInStorage should throw an error when the value is not a map",
+    () => {
+      assertThrows(
+        // @ts-expect-error Testing invalid input
+        () => setMapInStorage(key, "not a map"),
+        LocalStorageInsertTypeError
+      );
+    }
+  );
+
+  Deno.test(
+    "safeSetMapInStorage should return an error result when the value is not a map",
+    () => {
+      // @ts-expect-error Testing invalid input
+      const result = safeSetMapInStorage(key, "not a map");
+      assertEquals(result, {
+        success: false,
+        error: new LocalStorageInsertTypeError(key, "map", "string"),
       });
     }
   );

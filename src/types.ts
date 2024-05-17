@@ -19,4 +19,5 @@ export type LocalStoreType =
   | "undefined"
   | "object"
   | "array"
-  | "date";
+  | "date"
+  | "map";

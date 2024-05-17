@@ -1,4 +1,5 @@
 import { isDate } from "./is_date.ts";
+import { isMap } from "./is_map.ts";
 import type { LocalStoreType } from "./types.ts";
 
 export function getLocalStorageType(value: unknown): LocalStoreType {
@@ -16,12 +17,12 @@ export function getLocalStorageType(value: unknown): LocalStoreType {
     case "object": {
       if (isDate(value)) {
         return "date";
+      } else if (Array.isArray(value)) {
+        return "array";
+      } else if (isMap(value)) {
+        return "map";
       } else {
-        if (Array.isArray(value)) {
-          return "array";
-        } else {
-          return "object";
-        }
+        return "object";
       }
     }
   }

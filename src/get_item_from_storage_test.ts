@@ -11,6 +11,7 @@ import {
   setDateInStorage,
   setArrayInStorage,
   setObjectInStorage,
+  setMapInStorage,
 } from "./set_item_in_storage.ts";
 import {
   getStringFromStorage,
@@ -27,6 +28,8 @@ import {
   safeGetArrayFromStorage,
   getObjectFromStorage,
   safeGetObjectFromStorage,
+  getMapFromStorage,
+  safeGetMapFromStorage,
 } from "./get_item_from_storage.ts";
 import { LocalStorageFetchTypeError } from "./errors.ts";
 import { removeItemFromStorage } from "./remove_item_from_storage.ts";
@@ -407,6 +410,57 @@ Deno.test("Get type object from local storage", () => {
       assertEquals(result, {
         success: false,
         error: new LocalStorageFetchTypeError(key, "object", "string"),
+      });
+    }
+  );
+});
+
+Deno.test("Get type map from local storage", () => {
+  const key = "map-get-key";
+  removeItemFromStorage(key);
+
+  Deno.test("getMapFromStorage should return null if there is no value", () => {
+    const fetchedValue = getMapFromStorage(key);
+    assertEquals(fetchedValue, null);
+  });
+
+  const value = new Map();
+  value.set("testKey", "testValue");
+  setMapInStorage(key, value);
+
+  Deno.test(
+    "getMapFromStorage should return a map if there is a value in local storage",
+    () => {
+      const fetchedValue = getMapFromStorage(key);
+      assertEquals(fetchedValue, value);
+    }
+  );
+
+  Deno.test(
+    "safeGetMapFromStorage should safely get a map from local storage",
+    () => {
+      const result = safeGetMapFromStorage(key);
+      assertEquals(result, { success: true, value });
+    }
+  );
+
+  removeItemFromStorage(key);
+  setStringInStorage(key, "testValue");
+
+  Deno.test(
+    "getMapFromStorage should throw an error when the value is not a map",
+    () => {
+      assertThrows(() => getMapFromStorage(key), LocalStorageFetchTypeError);
+    }
+  );
+
+  Deno.test(
+    "safeGetMapFromStorage should return an error result when the value is not a map",
+    () => {
+      const result = safeGetMapFromStorage(key);
+      assertEquals(result, {
+        success: false,
+        error: new LocalStorageFetchTypeError(key, "map", "string"),
       });
     }
   );

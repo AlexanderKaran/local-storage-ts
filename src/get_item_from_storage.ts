@@ -1,5 +1,5 @@
 import {
-  LocalStorageError,
+  type LocalStorageError,
   LocalStorageFetchTypeError,
   LocalStorageTypeKeyError,
 } from "./errors.ts";
@@ -250,6 +250,37 @@ export function safeGetObjectFromStorage<
 >(key: string): Result<T | null, LocalStorageError> {
   try {
     return { success: true, value: getObjectFromStorage<T>(key) };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+/**
+ * Get a Map from local storage
+ *
+ * @param key The key to get from local storage
+ *
+ * @returns The Map value or null if the key does not exist
+ * @throws LocalStorageTypeKeyError
+ * @throws LocalStorageFetchTypeError
+ */
+export function getMapFromStorage(key: string): Map<unknown, unknown> | null {
+  return getItemAndValidate(key, (value) => new Map(JSON.parse(value)), "map");
+}
+
+/**
+ * Get a Map from local storage safely
+ *
+ * @param key The key to get from local storage
+ *
+ * @returns Result<Map<unknown, unknown> | null, LocalStorageError>
+ */
+export function safeGetMapFromStorage(
+  key: string
+): Result<Map<unknown, unknown> | null, LocalStorageError> {
+  try {
+    const value = getMapFromStorage(key);
+    return { success: true, value };
   } catch (error) {
     return { success: false, error };
   }

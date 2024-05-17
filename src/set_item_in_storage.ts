@@ -2,7 +2,7 @@ import { formatValue } from "./format_value.ts";
 import { getTypeKey } from "./get_type_key.ts";
 import { getLocalStorageType } from "./get_local_storage_type.ts";
 import {
-  LocalStorageError,
+  type LocalStorageError,
   LocalStorageInsertTypeError,
   LocalStorageTypeMismatchError,
 } from "./errors.ts";
@@ -293,6 +293,43 @@ export function safeSetObjectInStorage(
 ): Result<null, LocalStorageError> {
   try {
     setObjectInStorage(key, value);
+    return { success: true, value: null };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+/**
+ * Set a Map in local storage
+ *
+ * @param key The key to save the Map under in local storage
+ * @param value The Map to save in local storage
+ *
+ * @returns void
+ * @throws LocalStorageTypeMismatchError
+ * @throws LocalStorageInsertTypeError
+ */
+export function setMapInStorage(
+  key: string,
+  value?: Map<unknown, unknown>
+): void {
+  validateAndSetItem(key, "map", value);
+}
+
+/**
+ * Safely set a Map in local storage
+ *
+ * @param key The key to save the Map under in local storage
+ * @param value The Map to save in local storage
+ *
+ * @returns Result<null, LocalStorageError>
+ */
+export function safeSetMapInStorage(
+  key: string,
+  value?: Map<unknown, unknown>
+): Result<null, LocalStorageError> {
+  try {
+    setMapInStorage(key, value);
     return { success: true, value: null };
   } catch (error) {
     return { success: false, error };

@@ -44,3 +44,10 @@ Deno.test("formatValue should return undefined for undefined type", () => {
   const result = formatValue(undefined);
   assertEquals(result, undefined);
 });
+
+Deno.test("formatValue formats map correctly", () => {
+  const map = new Map();
+  map.set("key1", "value1");
+  map.set("key2", "value2");
+  assertEquals(formatValue(map), '[["key1","value1"],["key2","value2"]]');
+});
