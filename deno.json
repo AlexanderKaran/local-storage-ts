@@ -1,6 +1,6 @@
 {
   "name": "@alexander-karan/local-storage-ts",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "exports": "./mod.ts",
   "tasks": {
     "build:npm": "deno run -A build-npm.ts",

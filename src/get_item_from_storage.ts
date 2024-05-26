@@ -264,7 +264,9 @@ export function safeGetObjectFromStorage<
  * @throws LocalStorageTypeKeyError
  * @throws LocalStorageFetchTypeError
  */
-export function getMapFromStorage(key: string): Map<unknown, unknown> | null {
+export function getMapFromStorage<K = unknown, V = unknown>(
+	key: string,
+): Map<K, V> | null {
 	return getItemAndValidate(
 		key,
 		(value) => new Map(JSON.parse(value)),
@@ -279,11 +281,46 @@ export function getMapFromStorage(key: string): Map<unknown, unknown> | null {
  *
  * @returns Result<Map<unknown, unknown> | null, LocalStorageError>
  */
-export function safeGetMapFromStorage(
+export function safeGetMapFromStorage<K = unknown, V = unknown>(
 	key: string,
-): Result<Map<unknown, unknown> | null, LocalStorageError> {
+): Result<Map<K, V> | null, LocalStorageError> {
 	try {
-		const value = getMapFromStorage(key);
+		const value = getMapFromStorage<K, V>(key);
+		return { success: true, value };
+	} catch (error) {
+		return { success: false, error };
+	}
+}
+
+/**
+ * Get a Set from local storage
+ *
+ * @param key The key to get from local storage
+ *
+ * @returns The Set value or null if the key does not exist
+ * @throws LocalStorageTypeKeyError
+ * @throws LocalStorageFetchTypeError
+ */
+export function getSetFromStorage<T = unknown>(key: string): Set<T> | null {
+	const item = localStorage.getItem(key);
+	if (item === null) {
+		return null;
+	}
+	return new Set<T>(JSON.parse(item));
+}
+
+/**
+ * Get a Set from local storage safely
+ *
+ * @param key The key to get from local storage
+ *
+ * @returns Result<Set<unknown> | null, LocalStorageError>
+ */
+export function safeGetSetFromStorage<T = unknown>(
+	key: string,
+): Result<Set<T> | null, LocalStorageError> {
+	try {
+		const value = getSetFromStorage<T>(key);
 		return { success: true, value };
 	} catch (error) {
 		return { success: false, error };

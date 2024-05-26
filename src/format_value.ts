@@ -1,5 +1,6 @@
 import { isDate } from './is_date.ts';
 import { isMap } from './is_map.ts';
+import { isSet } from './is_set.ts';
 
 export function formatValue(value: unknown): string | undefined {
 	switch (typeof value) {
@@ -17,6 +18,8 @@ export function formatValue(value: unknown): string | undefined {
 		case 'object': {
 			if (isDate(value)) {
 				return value.toISOString();
+			} else if (isSet(value)) {
+				return JSON.stringify(Array.from(value));
 			} else if (isMap(value)) {
 				return JSON.stringify(Array.from(value.entries()));
 			} else {

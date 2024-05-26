@@ -11,6 +11,7 @@ import {
 	safeSetMapInStorage,
 	safeSetNumberInStorage,
 	safeSetObjectInStorage,
+	safeSetSetInStorage,
 	safeSetStringInStorage,
 	setArrayInStorage,
 	setBigIntInStorage,
@@ -19,6 +20,7 @@ import {
 	setMapInStorage,
 	setNumberInStorage,
 	setObjectInStorage,
+	setSetInStorage,
 	setStringInStorage,
 } from './set_item_in_storage.ts';
 import { LocalStorageInsertTypeError } from './errors.ts';
@@ -452,6 +454,64 @@ Deno.test('Set type map in storage', () => {
 			assertEquals(result, {
 				success: false,
 				error: new LocalStorageInsertTypeError(key, 'map', 'string'),
+			});
+		},
+	);
+
+	removeItemFromStorage(key);
+});
+
+Deno.test('Set type set in storage', () => {
+	const key = 'set-set-key';
+	removeItemFromStorage(key);
+
+	Deno.test('setMapInStorage should set a set in local storage', () => {
+		const value = new Set([1, 2, 3]);
+		setSetInStorage(key, value);
+		assertEquals(
+			localStorage.getItem(key),
+			JSON.stringify(Array.from(value.entries())),
+		);
+
+		const typeKey = localStorage.getItem(getTypeKey(key));
+		assertEquals(typeKey, 'map');
+	});
+
+	Deno.test(
+		'safeSetMapInStorage should safely set a set in local storage',
+		() => {
+			const value = new Set([1, 2, 3]);
+			const result = safeSetSetInStorage(key, value);
+			assertEquals(result.success, true);
+			assertEquals(
+				localStorage.getItem(key),
+				JSON.stringify(Array.from(value.entries())),
+			);
+
+			const typeKey = localStorage.getItem(getTypeKey(key));
+			assertEquals(typeKey, 'map');
+		},
+	);
+
+	Deno.test(
+		'setMapInStorage should throw an error when the value is not a set',
+		() => {
+			assertThrows(
+				// @ts-expect-error Testing invalid input
+				() => setMapInStorage(key, 'not a map'),
+				LocalStorageInsertTypeError,
+			);
+		},
+	);
+
+	Deno.test(
+		'safeSetMapInStorage should return an error result when the value is not a set',
+		() => {
+			// @ts-expect-error Testing invalid input
+			const result = safeSetMapInStorage(key, 'not a set');
+			assertEquals(result, {
+				success: false,
+				error: new LocalStorageInsertTypeError(key, 'set', 'string'),
 			});
 		},
 	);

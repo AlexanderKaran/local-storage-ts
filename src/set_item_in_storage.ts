@@ -338,3 +338,40 @@ export function safeSetMapInStorage(
 		return { success: false, error };
 	}
 }
+
+/**
+ * Set a Set in local storage
+ *
+ * @param key The key to save the Set under in local storage
+ * @param value The Set to save in local storage
+ *
+ * @returns void
+ * @throws LocalStorageTypeMismatchError
+ * @throws LocalStorageInsertTypeError
+ */
+export function setSetInStorage(
+	key: string,
+	value?: Set<unknown>,
+): void {
+	validateAndSetItem(key, 'set', value);
+}
+
+/**
+ * Safely set a Set in local storage
+ *
+ * @param key The key to save the Set under in local storage
+ * @param value The Set to save in local storage
+ *
+ * @returns Result<null, LocalStorageError>
+ */
+export function safeSetSetInStorage(
+	key: string,
+	value?: Set<unknown>,
+): Result<null, LocalStorageError> {
+	try {
+		setSetInStorage(key, value);
+		return { success: true, value: null };
+	} catch (error) {
+		return { success: false, error };
+	}
+}

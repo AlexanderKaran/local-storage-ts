@@ -20,4 +20,5 @@ export type LocalStoreType =
 	| 'object'
 	| 'array'
 	| 'date'
-	| 'map';
+	| 'map'
+	| 'set';

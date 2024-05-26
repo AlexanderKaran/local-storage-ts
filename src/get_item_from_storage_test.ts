@@ -11,6 +11,7 @@ import {
 	setMapInStorage,
 	setNumberInStorage,
 	setObjectInStorage,
+	setSetInStorage,
 	setStringInStorage,
 } from './set_item_in_storage.ts';
 import {
@@ -21,6 +22,7 @@ import {
 	getMapFromStorage,
 	getNumberFromStorage,
 	getObjectFromStorage,
+	getSetFromStorage,
 	getStringFromStorage,
 	safeGetArrayFromStorage,
 	safeGetBigIntFromStorage,
@@ -29,6 +31,7 @@ import {
 	safeGetMapFromStorage,
 	safeGetNumberFromStorage,
 	safeGetObjectFromStorage,
+	safeGetSetFromStorage,
 	safeGetStringFromStorage,
 } from './get_item_from_storage.ts';
 import { LocalStorageFetchTypeError } from './errors.ts';
@@ -482,6 +485,59 @@ Deno.test('Get type map from local storage', () => {
 			assertEquals(result, {
 				success: false,
 				error: new LocalStorageFetchTypeError(key, 'map', 'string'),
+			});
+		},
+	);
+});
+
+Deno.test('Get type set from local storage', () => {
+	const key = 'set-get-key';
+	removeItemFromStorage(key);
+
+	Deno.test('getSetFromStorage should return null if there is no value', () => {
+		const fetchedValue = getSetFromStorage(key);
+		assertEquals(fetchedValue, null);
+	});
+
+	const value = new Set([1, 2, 3]);
+	setSetInStorage(key, value);
+
+	Deno.test(
+		'getSetFromStorage should return a map if there is a value in local storage',
+		() => {
+			const fetchedValue = getSetFromStorage(key);
+			assertEquals(fetchedValue, value);
+		},
+	);
+
+	Deno.test(
+		'safeGetSetFromStorage should safely get a map from local storage',
+		() => {
+			const result = safeGetSetFromStorage(key);
+			assertEquals(result, { success: true, value });
+		},
+	);
+
+	removeItemFromStorage(key);
+	setStringInStorage(key, 'testValue');
+
+	Deno.test(
+		'getSetFromStorage should throw an error when the value is not a Set',
+		() => {
+			assertThrows(
+				() => getSetFromStorage(key),
+				LocalStorageFetchTypeError,
+			);
+		},
+	);
+
+	Deno.test(
+		'safeGetSetFromStorage should return an error result when the value is not a set',
+		() => {
+			const result = safeGetSetFromStorage(key);
+			assertEquals(result, {
+				success: false,
+				error: new LocalStorageFetchTypeError(key, 'set', 'string'),
 			});
 		},
 	);
