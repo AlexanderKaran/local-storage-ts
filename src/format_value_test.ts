@@ -51,3 +51,9 @@ Deno.test('formatValue formats map correctly', () => {
 	map.set('key2', 'value2');
 	assertEquals(formatValue(map), '[["key1","value1"],["key2","value2"]]');
 });
+
+Deno.test('formatValue should correctly format set type', () => {
+	const set = new Set([1, 2, 3]);
+	const result = formatValue(set);
+	assertEquals(result, JSON.stringify(Array.from(set)));
+});
